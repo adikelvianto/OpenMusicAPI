@@ -1,9 +1,9 @@
 const { nanoid } = require('nanoid');
 
-class MusicsService {
+class SongsService {
   constructor() {
     this._music = [];
   }
 }
 
-module.exports = MusicsService;
+module.exports = SongsService;
