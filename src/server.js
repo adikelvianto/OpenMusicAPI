@@ -1,11 +1,14 @@
 /* eslint-disable no-console */
 const Hapi = require('@hapi/hapi');
-const musics = require('./api/musics');
-const MusicsService = require('./services/inMemory/MusicsService');
-const MusicsValidator = require('./validator/musics');
+const songs = require('./api/songs');
+const albums = require('./api/albums');
+const SongsService = require('./services/inMemory/SongsService');
+const AlbumsService = require('./services/inMemory/AlbumsService');
+const SongsValidator = require('./validator/songs');
+const AlbumsValidator = require('./validator/albums');
 
 const init = async () => {
-  const musicsService = new MusicsService();
+  const songsService = new SongsService();
   const server = Hapi.server({
     port: 5000,
     host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
@@ -16,13 +19,22 @@ const init = async () => {
     },
   });
 
-  await server.register({
-    plugin: musics,
-    options: {
-      service: musicsService,
-      validator: MusicsValidator,
+  await server.register([
+    {
+      plugin: songs,
+      options: {
+        service: songsService,
+        validator: SongsValidator,
+      },
     },
-  });
+    {
+      plugin: albums,
+      options: {
+        service: AlbumsService,
+        validator: AlbumsValidator,
+      },
+    },
+  ]);
 
   await server.start();
   console.log(`Server berjalan pada ${server.info.uri}`);
