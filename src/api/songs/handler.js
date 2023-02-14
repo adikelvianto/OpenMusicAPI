@@ -64,6 +64,7 @@ class SongsHandler {
     try {
       const { id } = request.params;
       const song = await this._service.getSongById(id);
+
       return {
         status: 'success',
         data: {
@@ -80,7 +81,6 @@ class SongsHandler {
         return response;
       }
 
-      // Server ERROR!
       const response = h.response({
         status: 'error',
         message: 'Maaf, terjadi kegagalan pada server kami.',
@@ -94,13 +94,22 @@ class SongsHandler {
   async putSongByIdHandler(request, h) {
     try {
       this._validator.validateSongPayload(request.payload);
+      const { title, year, genre, performer, duration, albumId } =
+        request.payload;
       const { id } = request.params;
 
-      await this._service.editSongById(id, request.payload);
+      await this._service.editSongById(id, {
+        title,
+        year,
+        genre,
+        performer,
+        duration,
+        albumId,
+      });
 
       return {
         status: 'success',
-        message: 'Lagu telah diperbarui',
+        message: 'Lagu berhasil diperbarui!',
       };
     } catch (error) {
       if (error instanceof ClientError) {
@@ -112,7 +121,6 @@ class SongsHandler {
         return response;
       }
 
-      // Server ERROR!
       const response = h.response({
         status: 'error',
         message: 'Maaf, terjadi kegagalan pada server kami.',
@@ -126,10 +134,12 @@ class SongsHandler {
   async deleteSongByIdHandler(request, h) {
     try {
       const { id } = request.params;
+
       await this._service.deleteSongById(id);
+
       return {
         status: 'success',
-        message: 'Lagu telah dihapus',
+        message: 'Lagu berhasil dihapus!',
       };
     } catch (error) {
       if (error instanceof ClientError) {
@@ -141,7 +151,6 @@ class SongsHandler {
         return response;
       }
 
-      // Server ERROR!
       const response = h.response({
         status: 'error',
         message: 'Maaf, terjadi kegagalan pada server kami.',
@@ -154,4 +163,3 @@ class SongsHandler {
 }
 
 module.exports = SongsHandler;
-
