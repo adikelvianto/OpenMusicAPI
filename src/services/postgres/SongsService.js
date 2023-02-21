@@ -21,7 +21,6 @@ class SongsService {
       text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
       values: [id, title, year, genre, performer, duration, albumId],
     };
-    console.log(query.values);
     const result = await this._pool.query(query);
 
     if (!result.rows[0].id) {
@@ -34,7 +33,7 @@ class SongsService {
   // Get song service
   async getSongs() {
     const result = await this._pool.query('SELECT id, title, performer FROM songs');
-    return result.rows.map(mapDBToModel);
+    return result.rows;
   }
 
   // Get song by Id service
