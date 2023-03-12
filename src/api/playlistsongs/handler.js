@@ -15,16 +15,18 @@ class PlaylistsongsHandler {
   async postPlaylistsongHandler(request, h) {
     try {
       this._validator.validatePlaylistsongPayload(request.payload);
-      const { id: owner } = request.auth.credentials;
-      const { songId } = request.payload;
-      const { id: playlistId } = request.params;
 
-      await this._playlistsService.verifyPlaylistAccess(playlistId, owner);
+      const { id: playlistId } = request.params;
+      const { id: credentialId } = request.auth.credentials;
+      const { songId } = request.payload;
+
+      await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+      await this._playlistsongsService.verifySongExist(songId);
       const playlistsongId = await this._playlistsongsService.addPlaylistsong(songId, playlistId);
 
       const response = h.response({
         status: 'success',
-        message: 'Lagu berhasil ditambahkan',
+        message: 'Lagu berhasil ditambahkan ke playlist',
         data: {
           playlistsongId,
         },
@@ -53,22 +55,18 @@ class PlaylistsongsHandler {
 
   async getPlaylistsongByIdHandler(request, h) {
     try {
-      const { id: owner } = request.auth.credentials;
+      const { id: credentialId } = request.auth.credentials;
       const { id: playlistId } = request.params;
 
-      await this._playlistsService.verifyPlaylistAccess(playlistId, owner);
-      const playlistsongs = await this._playlistsongsService.getPlaylistsongById(playlistId);
-
-      const playlistsongsProps = playlistsongs.map((playlistsong) => ({
-        id: playlistsong.id,
-        title: playlistsong.title,
-        performer: playlistsong.performer,
-      }));
+      await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+      const playlist = await this._playlistsService.getPlaylistById(playlistId);
+      const songs = await this._playlistsongsService.getPlaylistsongById(playlistId);
+      const playlistsongs = { ...playlist, songs };
 
       return {
         status: 'success',
         data: {
-          songs: playlistsongsProps,
+          playlist: playlistsongs,
         },
       };
     } catch (error) {
@@ -94,11 +92,11 @@ class PlaylistsongsHandler {
   async deletePlaylistsongHandler(request, h) {
     try {
       this._validator.validatePlaylistsongPayload(request.payload);
-      const { id: owner } = request.auth.credentials;
+      const { id: credentialId } = request.auth.credentials;
       const { songId } = request.payload;
       const { id: playlistId } = request.params;
 
-      await this._playlistsService.verifyPlaylistAccess(playlistId, owner);
+      await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
       await this._playlistsongsService.deletePlaylistsong(songId, playlistId);
 
       return {

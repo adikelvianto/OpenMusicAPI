@@ -2,7 +2,6 @@
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
-const { mapDBToModel } = require('../../utils');
 const NotFoundError = require('../../exceptions/NotFoundError');
 const AuthorizationError = require('../../exceptions/AuthorizationError');
 
@@ -33,7 +32,7 @@ class PlaylistsService {
 
   async getPlaylists(owner) {
     const query = {
-      text: `SELECT playlists.*, users.username FROM playlists
+      text: `SELECT playlists.id, playlists.name, playlists.owner, users.username FROM playlists
       LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
       LEFT JOIN users ON playlists.owner = users.id
       WHERE playlists.owner = $1 OR collaborations.user_id = $1
@@ -42,12 +41,12 @@ class PlaylistsService {
     };
 
     const result = await this._pool.query(query);
-    return result.rows.map(mapDBToModel);
+    return result.rows;
   }
 
   async getPlaylistById(id) {
     const query = {
-      text: `SELECT playlists.*, users.username
+      text: `SELECT playlists.id, playlists.name, users.username
       FROM playlists
       LEFT JOIN users ON users.id = playlists.owner
       WHERE playlists.id = $1`,
@@ -59,7 +58,7 @@ class PlaylistsService {
       throw new NotFoundError('Playlist tidak ditemukan');
     }
 
-    return result.rows.map(mapDBToModel)[0];
+    return result.rows[0];
   }
 
   async editPlaylistById(id, {

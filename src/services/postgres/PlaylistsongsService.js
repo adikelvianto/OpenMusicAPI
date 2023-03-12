@@ -29,7 +29,9 @@ class PlaylistsongsService {
 
   async getPlaylistsongById(id) {
     const query = {
-      text: `SELECT playlistsongs.*, songs.title, songs.performer FROM playlistsongs LEFT JOIN songs ON songs.id = playlistsongs.song_id 
+      text: `SELECT songs.id, songs.title, songs.performer
+      FROM playlistsongs
+      INNER JOIN songs ON songs.id = playlistsongs.song_id 
       WHERE playlistsongs.playlist_id = $1`,
       values: [id],
     };
@@ -52,6 +54,19 @@ class PlaylistsongsService {
 
     if (!result.rows.length) {
       throw new InvariantError('Lagu gagal dihapus');
+    }
+  }
+
+  async verifySongExist(songId) {
+    const query = {
+      text: 'SELECT * FROM songs WHERE id = $1',
+      values: [songId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Lagu tidak ditemukan');
     }
   }
 

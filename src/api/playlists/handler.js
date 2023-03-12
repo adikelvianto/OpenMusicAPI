@@ -55,40 +55,21 @@ class PlaylistsHandler {
     }
   }
 
-  async getPlaylistsHandler(request, h) {
-    try {
-      const { id: credentialId } = request.auth.credentials;
-      const playlists = await this._playlistsService.getPlaylists(credentialId);
+  async getPlaylistsHandler(request) {
+    const { id: credentialId } = request.auth.credentials;
+    const playlists = await this._playlistsService.getPlaylists(credentialId);
 
-      const playlistsProps = playlists.map((playlist) => ({
-        id: playlist.id,
-        name: playlist.name,
-        username: playlist.username,
-      }));
-      return {
-        status: 'success',
-        data: {
-          playlists: playlistsProps,
-        },
-      };
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      return response;
-    }
+    const playlistsProps = playlists.map((playlist) => ({
+      id: playlist.id,
+      name: playlist.name,
+      username: playlist.username,
+    }));
+    return {
+      status: 'success',
+      data: {
+        playlists: playlistsProps,
+      },
+    };
   }
 
   async getPlaylistByIdHandler(request, h) {
