@@ -11,12 +11,9 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  // menghapus constraint fk_playlists.owner_users.id pada tabel playlists
   pgm.dropConstraint('playlists', 'fk_playlists.owner_users.id');
 
-  // mengubah nilai owner old_playlists pada playlist menjadi NULL
   pgm.sql("UPDATE playlists SET owner = NULL WHERE owner = 'old_playlists'");
 
-  // menghapus user baru.
   pgm.sql("DELETE FROM users WHERE id = 'old_playlists'");
 };
