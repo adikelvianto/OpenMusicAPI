@@ -15,3 +15,5 @@ The features embedded in OpenMusic API include:
 - Uploading album covers
 - Liking albums
 - Server-side cache
+
+Note: In the export feature, the message broker uses the AMQP protocol to enable the export process to not disturb the performance of the main server. The queue consumer folder can be found in [OpenMusicConsumer](https://github.com/adikelvianto/OpenMusicConsumer).
