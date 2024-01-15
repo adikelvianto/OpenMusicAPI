@@ -77,16 +77,3 @@ This project is a submission for the "Belajar Fundamental Aplikasi Back-End" cou
 ## Export Feature Details
 
 In the export feature, the message broker uses the **AMQP protocol** to enable the export process without disturbing the main server's performance. The queue consumer folder can be found in [OpenMusicConsumer](https://github.com/adikelvianto/OpenMusicConsumer).
-
-
-## Getting Started
-To set up and run the OpenMusic API locally, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/OpenMusic-API.git
-   cd OpenMusic-API
-
-2. Install dependecies:
-   ```bash
-   npm install
