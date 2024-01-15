@@ -77,3 +77,63 @@ This project is a submission for the "Belajar Fundamental Aplikasi Back-End" cou
 ## Export Feature Details
 
 In the export feature, the message broker uses the **AMQP protocol** to enable the export process without disturbing the main server's performance. The queue consumer folder can be found in [OpenMusicConsumer](https://github.com/adikelvianto/OpenMusicConsumer).
+
+## Automated Testing with Postman
+You can find the files for automation testing [here](https://github.com/adikelvianto/OpenMusicAPI/tree/main/postman)
+
+# Getting Started with OpenMusic API
+
+## Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- [Node.js](https://nodejs.org/) - Runtime environment for JavaScript.
+- [PostgreSQL](https://www.postgresql.org/) - Database server.
+- [Redis](https://redis.io/) - In-memory data structure store.
+- [RabbitMQ](https://www.rabbitmq.com/) - Message broker.
+- [Git](https://git-scm.com/) - Version control system.
+
+## Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/OpenMusicAPI.git
+   cd OpenMusicAPI
+2. Create .env file consisting this template
+    ```env
+    HOST=localhost
+    PORT=5000
+
+    # PostgreSQL Database
+    PGUSER=your_postgres_user
+    PGHOST=localhost
+    PGPASSWORD=your_postgres_password
+    PGDATABASE=your_postgres_database
+    PGPORT=your_postgres_port
+
+    # JWT Token
+    ACCESS_TOKEN_KEY=2862379d4164bf0d9f5e48d47c0f68dff921e3d24baf2847ebace82e26264e2307c1676fb7b17ecdb925285783fe7a4a5e58acbfe12691029cae1e8cae37d2c2
+    REFRESH_TOKEN_KEY=92c03f52876f7fdd298d564510ebc9a43d5f5f6abee41c984e2ccd6dc8bd7f6172cccb3711d3ff252b02e009844be73a6be9f3a887d6f0e891be0436d34697c7
+    ACCESS_TOKEN_AGE=1800
+
+    # Message Broker
+    RABBITMQ_SERVER=amqp://localhost
+
+    # Redis
+    REDIS_SERVER=localhost
+3. Execute databse creation: </br>
+   Run the following command to execute the database migration and create the necessary tables:
+    ```bash
+    npm run migrate up
+4. Run the application:
+    - Run in development mode:
+    ```bash
+    npm run start-dev
+    ```
+    - Run in production mode:
+    ```bash
+    npm run start-prod
+    ```
+
+
