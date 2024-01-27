@@ -100,7 +100,7 @@ Make sure you have the following installed on your machine:
    ```bash
    git clone https://github.com/yourusername/OpenMusicAPI.git
    cd OpenMusicAPI
-2. Create .env file consisting this template
+2. Create .env file consisting this template:
     ```env
     HOST=localhost
     PORT=5000
@@ -122,8 +122,7 @@ Make sure you have the following installed on your machine:
 
     # Redis
     REDIS_SERVER=localhost
-3. Execute databse creation: </br>
-   Run the following command to execute the database migration and create the necessary tables:
+3. Execute databse creation:
     ```bash
     npm run migrate up
 4. Run the application:
